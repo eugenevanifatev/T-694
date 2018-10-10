@@ -1,0 +1,213 @@
+//Создать новый класс Tel, содержащий поля:
+    //День разговора (целое число от 1 до 7)
+    //Время разговора (вещественное число)
+    //Стоймость (вещественное число)
+//Создать новый метод для подсчёта стоймости телефонного разговора в зависимости от дня недели:
+    //В выходные дни стоймость разговора меньше на 10% 
+
+using System;
+
+namespace ConsoleApp1
+{
+    class Tel
+    {
+        private short _weekDay;
+        private double timeSec;
+        private double costPerMin;
+
+        public short weekDay
+        {
+            get { return _weekDay; }
+            set
+            {
+                _weekDay = value;
+                if (_weekDay > 7) { _weekDay = 7; }
+                if (_weekDay < 1) { _weekDay = 1; }
+            }
+        }
+
+        public Tel()
+        {
+            weekDay = 0;
+            timeSec = 0;
+            costPerMin = 0;
+
+        exceptionCaught:
+
+            try
+            {
+                do
+                {
+                    Console.Clear();
+                    Console.Write("День разговора: ");
+                    weekDay = Convert.ToInt16(Console.ReadLine());
+                }
+                while (!(weekDay <= 7 || weekDay >= 1));
+                Console.Clear();
+                Console.Write("Стоймость разговора (руб/мин): ");
+                costPerMin = Convert.ToDouble(Console.ReadLine());
+                Console.Clear();
+                Console.Write("Время разговора (сек): ");
+                timeSec = Convert.ToDouble(Console.ReadLine());
+            }
+            catch (FormatException)
+            {
+                Console.Clear();
+                Console.Write("Ошибка ввода: Принимаются дни от понедельника до воскресенья в виде цифр от 1 до 7.");
+                Console.ReadKey(true);
+                goto exceptionCaught;
+            }
+            catch (Exception)
+            {
+                Console.Clear();
+                Console.Write("Ошибка ввода");
+                Console.ReadKey(true);
+                goto exceptionCaught;
+            }
+        }
+        public Tel(short day, double sec, double cost)
+        {
+            weekDay = 0;
+            timeSec = 0;
+            costPerMin = 0;
+
+            try
+            {
+                weekDay = day;
+                if (!(weekDay <= 7 || weekDay >= 1))
+                {
+                    ArgumentOutOfRangeException WrongWeekday = new ArgumentOutOfRangeException("day");
+                    throw (WrongWeekday);
+                }
+                timeSec = sec;
+                costPerMin = cost;
+            }
+            catch (Exception)
+            {
+                Console.Clear();
+                Console.Write("Возникла ошибка при объявлении объекта. Переход к ручному вводу.");
+                Console.ReadKey();
+
+            exceptionCaught:
+
+                try
+                {
+                    do
+                    {
+                        Console.Clear();
+                        Console.Write("День разговора: ");
+                        weekDay = Convert.ToInt16(Console.ReadLine());
+                    }
+                    while (!(weekDay <= 7 || weekDay >= 1));
+                    Console.Clear();
+                    Console.Write("Стоймость разговора (руб/мин): ");
+                    costPerMin = Convert.ToDouble(Console.ReadLine());
+                    Console.Clear();
+                    Console.Write("Время разговора (сек): ");
+                    timeSec = Convert.ToDouble(Console.ReadLine());
+                }
+                catch (FormatException)
+                {
+                    Console.Clear();
+                    Console.Write("Ошибка ввода: Принимаются дни от понедельника до воскресенья в виде цифр от 1 до 7.");
+                    Console.ReadKey(true);
+                    goto exceptionCaught;
+                }
+                catch (Exception)
+                {
+                    Console.Clear();
+                    Console.Write("Ошибка ввода");
+                    Console.ReadKey(true);
+                    goto exceptionCaught;
+                }
+            }
+        }
+        private double returnCost()
+        {
+            double timeMin = Math.Truncate(timeSec / 60);
+            double cost = timeMin * costPerMin;
+            if (weekDay > 5) cost = cost - (cost / 10);
+            return cost;
+        }
+        public void printCallInfo()
+        {
+            string discount = "";
+            Console.Clear();
+            Console.Write("Звонок был совершён в ");
+            switch (weekDay)
+            {
+                case 1:
+                    Console.WriteLine("понедельник"); break;
+                case 2:
+                    Console.WriteLine("вторник"); break;
+                case 3:
+                    Console.WriteLine("среду"); break;
+                case 4:
+                    Console.WriteLine("четверг"); break;
+                case 5:
+                    Console.WriteLine("пятницу"); break;
+                case 6:
+                    Console.WriteLine("субботу"); discount = "(СКИДКА!!)"; break;
+                case 7:
+                    Console.WriteLine("воскресенье"); discount = "(СКИДКА!!)"; break;
+            }
+            Console.WriteLine("Стоймость звонка в минуту: " + costPerMin);
+            Console.WriteLine("Время звонка (сек): " + timeSec);
+            Console.WriteLine("Стоймость звонка " + discount + ": " + returnCost());
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Tel a = new Tel();
+            a.printCallInfo();
+            Console.ReadKey(true);
+        }
+    }
+}
+
+
+//Определено 2 класса.
+//Первый класс будет находить квадрат числа 1 до 10, используя цикл.
+//Другой класс будет ждать, когда в первом классе квадрат числа станет больше 25, и после этого выводит в консоль фразу "Квадрат числа больше 25!".
+using System;
+
+namespace ConsoleApp1
+{
+    class БольшеЛи25
+    {
+        private double _a;
+        public double a
+        {
+            get
+            {
+                if (_a > 25) Console.Write("Квадрат числа больше 25! ");
+                return _a;
+            }
+            set { _a = value; }
+        }
+    }
+    class КвадратЧисел
+    {
+        БольшеЛи25 проверка = new БольшеЛи25();
+        public void sqre(int a, int b)
+        {
+            for(int i = a; i <= b; i++)
+            {
+                Console.Write(i + " - ");
+                проверка.a = Math.Pow(i,2);
+                Console.WriteLine(проверка.a);
+            }
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            КвадратЧисел a = new КвадратЧисел();
+            a.sqre(1,10);
+            Console.ReadKey();
+        }
+    }
+}
